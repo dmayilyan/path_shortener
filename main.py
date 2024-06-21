@@ -1,5 +1,5 @@
 from os import path
-from typing import Iterable, List, Tuple
+from typing import Iterable, Tuple
 
 
 def split_files(paths: Iterable[str]) -> Tuple[Tuple[str], Tuple[str]]:
@@ -9,6 +9,16 @@ def split_files(paths: Iterable[str]) -> Tuple[Tuple[str], Tuple[str]]:
 
     return paths, files
 
+
+def create_final_list(paths):
+    return len(paths) * [""]
+
+
+def create_box_list(paths):
+    splits = [i.split("/") for i in paths]
+    print(splits)
+    max_path_len = max(map(len, splits))
+    #  box_list = max_path_len
 
 #  splits = a.split("/"), b.split("/")
 
@@ -68,5 +78,10 @@ if __name__ == "__main__":
     a = "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away/foo.bar"
     b = "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away/notfoo.bar"
     c = "ns-task-script-hello-world/Lab1"
-    split_list = split_files([a, b, c])
-    print(split_list)
+
+    path_list = [a, b, c]
+    paths, filenames = split_files(path_list)
+
+    final_list = create_final_list(paths)
+
+    create_box_list(path_list)
