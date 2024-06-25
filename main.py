@@ -1,16 +1,17 @@
 from os import path
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, List
 
 
-def split_files(paths: Iterable[str]) -> Tuple[Tuple[str], Tuple[str]]:
+def split_files(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
     split_blocks = [path.split(p) for p in paths]
 
     paths, files = zip(*((p, f) for p, f in split_blocks))
+    paths = [i.split("/") for i in paths]
 
     return paths, files
 
 
-def create_final_list(paths):
+def create_final_list(paths) -> List[str]:
     return len(paths) * [""]
 
 
@@ -83,5 +84,6 @@ if __name__ == "__main__":
     paths, filenames = split_files(path_list)
 
     final_list = create_final_list(paths)
+    print(final_list)
 
-    create_box_list(path_list)
+    #  create_box_list(path_list)

@@ -11,18 +11,40 @@ def path_list():
     return [a, b, c]
 
 
-def test_split_files(path_list):
+@fixture
+def path_only_list():
+    a = [
+        "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics",
+        "to",
+        "somewhere",
+        "far",
+        "far",
+        "away",
+    ]
+    b = [
+        "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics",
+        "to",
+        "somewhere",
+        "far",
+        "far",
+        "away",
+    ]
+    c = ["ns-task-script-hello-world"]
+
+    return [a, b, c]
+
+
+def test_split_files(path_list, path_only_list):
     expected = (
-        (
-            "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away",
-            "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away",
-            "ns-task-script-hello-world",
-        ),
+        path_only_list,
         ("foo.bar", "notfoo.bar", "Lab1"),
     )
     assert split_files(path_list) == expected
 
 
 def test_create_final_paths(path_list):
-    expected = len(path_list) * [""]
+    expected = ["", "", ""]
     assert create_final_list(path_list) == expected
+
+
+def test_create_paths_slice(path_list): ...
