@@ -13,8 +13,8 @@ def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
     return paths, files
 
 
-def create_final_list(paths) -> List[str]:
-    return [[] for _ in paths]
+def create_final_list(paths, fill_value) -> List:
+    return [fill_value for _ in paths]
 
 
 def process_paths(paths, final_list):
