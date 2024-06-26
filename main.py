@@ -4,43 +4,23 @@ from os import path
 from typing import Iterable, Tuple, List
 
 
-# Terrimble ideas to make list object not to refer one
-class EmptyString:
-    """This class is made to enforce the list of empty string to
-    have different objects"""
-
-    def __str__(self):
-        return ""
-
-
-class EmptyList:
-    """This class is made to enforce the list of empty string to
-    have different objects"""
-
-    def __str__(self):
-        return []
-
-
 def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
     split_blocks = [path.split(p) for p in paths]
 
     paths, files = zip(*((p, f) for p, f in split_blocks))
+    # This is not OS agnostic approach
     paths = [i.split("/") for i in paths]
 
     return paths, files
 
 
-# Due to empty list creation pecularity we would stick to only list of lists
-# object
-def create_final_list(paths, fill_value=None) -> List[str]:
-    if fill_value is None:
-        fill_value = []
-
-    # this si the only way that enforces lists inside not to be assigned to the same object
+def create_final_list(paths: List[List[str]]) -> List[List[str]]:
+    """This is the only reasonalbe way that enforce lists inside of a list not
+    to be assigned to the same object"""
     return [[chr(0)] for _ in range(len(paths))]
 
 
-def process_paths(paths, final_list):
+def process_paths(paths: List[List[str]], final_list) -> List:
     for slice_list in zip_longest(*paths, fillvalue=""):
         if all(map(lambda x: x < 10, map(len, slice_list))):
             for pathi, p in enumerate(slice_list):
@@ -57,14 +37,14 @@ def process_paths(paths, final_list):
             else:
                 mask.append(False)
 
-        surround_size = 2
+        SURROUND_SIZE = 2
 
         mask_shifted = mask.copy()
-        mask_shifted += [False] * surround_size
-        mask_shifted = mask_shifted[surround_size:]
+        mask_shifted += [False] * SURROUND_SIZE
+        mask_shifted = mask_shifted[SURROUND_SIZE:]
         final_mask = [a or b for a, b in zip(mask, mask_shifted)]
 
-        buffer_list = create_final_list(slice_list, fill_value=[])
+        buffer_list = create_final_list(slice_list)
         for vals in zip(*slice_list, final_mask):
             chars, match = vals[:-1], vals[-1]
             if len(set(chars)) == 1 and not match:
@@ -88,11 +68,14 @@ def process_paths(paths, final_list):
 
 
 if __name__ == "__main__":
-    a = "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away/foo.bar"
-    b = "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away/notfoo.bar"
+    a = "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/" \
+        "somewhere/far/far/away/foo.bar"
+    b = "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/" \
+        "somewhere/far/far/away/notfoo.bar"
     c = "ns-task-script-hello-world/Lab1"
 
     path_list = [a, b]
+    print(f"This:\n{path_list}")
     paths, filenames = split_paths(path_list)
 
     # TODO
@@ -102,4 +85,7 @@ if __name__ == "__main__":
 
     processed_paths = process_paths(paths, final_list)
 
-    print(processed_paths)
+    for i, pp in enumerate(filenames):
+        processed_paths[i] = path.join(processed_paths[i], pp)
+
+    print(f"Becomes this:\n{processed_paths}")

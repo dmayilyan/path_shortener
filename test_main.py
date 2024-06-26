@@ -48,12 +48,8 @@ def test_split_paths(path_list, path_only_list):
     assert split_paths(path_list) == expected
 
 
-@mark.parametrize(
-    "fill_value, expected",
-    [([], [[], [], []]), ("", ["", "", ""])],
-)
-def test_create_final_paths(path_list, fill_value, expected):
-    assert create_final_list(path_list, fill_value) == expected
+def test_create_final_paths(path_list, expected):
+    assert create_final_list(path_list) == expected
 
 
 def test_create_paths_slice(path_list): ...
