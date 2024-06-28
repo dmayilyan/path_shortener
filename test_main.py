@@ -1,5 +1,6 @@
+from pytest import fixture
+
 from main import *
-from pytest import fixture, mark
 
 
 @fixture
@@ -132,3 +133,14 @@ def test_create_mask(slice_list):
         True,
     ]
     create_mask(slice_list) == expected
+
+
+def test_split_slice():
+    input_paths = [
+        "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics\x00",
+        "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics",
+    ]
+
+    expected = [('ns-client-bavo-protocol-manua', 'l-lhc-mellinbright-catmetrics\x00'),
+                ('ns-client-bavo-task-script-lh', 'c-plate-reader-echo-catmetrics')]
+    assert split_slice(input_paths) == expected

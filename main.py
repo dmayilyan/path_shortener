@@ -1,7 +1,6 @@
 from itertools import zip_longest
-from collections import deque
 from os import path
-from typing import Iterable, Tuple, List
+from typing import Iterable, List, Tuple
 
 
 def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
@@ -35,6 +34,12 @@ def create_mask(slice_list: List[str]) -> List[bool]:
     mask_shifted = mask_shifted[SURROUND_SIZE:]
 
     return [a or b for a, b in zip(mask, mask_shifted)]
+
+
+def split_slice(path_slice: List[str]):
+    # We use len freely as we know that path slices are
+    # already of an equal size
+    return [(i[: len(i) // 2], i[len(i) // 2:]) for i in path_slice]
 
 
 def process_paths(paths: List[List[str]]) -> List[str]:
