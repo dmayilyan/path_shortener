@@ -38,9 +38,10 @@ def create_mask(slice_list: List[str]) -> List[bool]:
 
 
 def process_paths(paths: List[List[str]]) -> List[str]:
+    MIN_FOLDER_LENGTH = 10
     final_list = create_placeholder_list(paths)
     for slice_list in zip_longest(*paths, fillvalue=""):
-        if all(map(lambda x: x < 10, map(len, slice_list))):
+        if all(map(lambda x: x < MIN_FOLDER_LENGTH, map(len, slice_list))):
             for pathi, p in enumerate(slice_list):
                 final_list[pathi].append(p)
             continue
@@ -67,6 +68,7 @@ def process_paths(paths: List[List[str]]) -> List[str]:
         for bi, fi in zip(buffer_list, final_list):
             fi.append(bi)
 
+    # Getting rid of the object uniquiness enforcer
     final_list = [fi[1:] for fi in final_list]
     final_list = [path.join(*fi) for fi in final_list]
 
