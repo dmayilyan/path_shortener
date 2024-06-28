@@ -20,6 +20,23 @@ def create_placeholder_list(paths: List[List[str]]) -> List[List[str]]:
     return [[chr(0)] for _ in range(len(paths))]
 
 
+def create_mask(slice_list: List[str]) -> List[bool]:
+    mask = []
+    for vals in zip(*slice_list):
+        if len(set(vals)) != 1:
+            mask.append(True)
+        else:
+            mask.append(False)
+
+    SURROUND_SIZE = 2
+
+    mask_shifted = mask.copy()
+    mask_shifted += [False] * SURROUND_SIZE
+    mask_shifted = mask_shifted[SURROUND_SIZE:]
+
+    return [a or b for a, b in zip(mask, mask_shifted)]
+
+
 def process_paths(paths: List[List[str]]) -> List[str]:
     final_list = create_placeholder_list(paths)
     for slice_list in zip_longest(*paths, fillvalue=""):
@@ -31,22 +48,10 @@ def process_paths(paths: List[List[str]]) -> List[str]:
         max_in_slice = max(map(len, slice_list))
         slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
 
-        mask = []
-        for vals in zip(*slice_list):
-            if len(set(vals)) != 1:
-                mask.append(True)
-            else:
-                mask.append(False)
-
-        SURROUND_SIZE = 2
-
-        mask_shifted = mask.copy()
-        mask_shifted += [False] * SURROUND_SIZE
-        mask_shifted = mask_shifted[SURROUND_SIZE:]
-        final_mask = [a or b for a, b in zip(mask, mask_shifted)]
+        mask = create_mask(slice_list)
 
         buffer_list = create_placeholder_list(slice_list)
-        for vals in zip(*slice_list, final_mask):
+        for vals in zip(*slice_list, mask):
             chars, match = vals[:-1], vals[-1]
             if len(set(chars)) == 1 and not match:
                 for vali in range(len(chars)):
@@ -79,13 +84,11 @@ if __name__ == "__main__":
     )
     c = "ns-task-script-hello-world/Lab1"
 
-    path_list = [a, b, c]
+    path_list = [a, b]
     print(f"This:\n{path_list}")
     paths, filenames = split_paths(path_list)
 
-    print("paths", paths)
     processed_paths = process_paths(paths)
-    print(processed_paths)
 
     for i, pp in enumerate(filenames):
         processed_paths[i] = path.join(processed_paths[i], pp)

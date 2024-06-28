@@ -40,6 +40,11 @@ def path_only_list():
     return [a, b, c]
 
 
+@fixture
+def slice_list(path_only_list):
+    return [i[0] for i in path_only_list[:2]]
+
+
 def test_split_paths(path_list, path_only_list):
     expected = (
         path_only_list,
@@ -55,8 +60,75 @@ def test_create_placeholder_list(path_only_list):
 
 def test_process_paths(path_only_list):
     expected = [
-        "...s-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away",
-        "...s-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away",
+        "...s-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/"
+        "somewhere/far/far/away",
+        "...s-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/"
+        "somewhere/far/far/away",
         "...s-task-script-hello-world/",
     ]
     assert process_paths(path_only_list) == expected
+
+
+def test_create_mask(slice_list):
+    expected = [
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        False,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+        True,
+    ]
+    create_mask(slice_list) == expected
