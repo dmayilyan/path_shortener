@@ -14,13 +14,14 @@ def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
     return paths, files
 
 
-def create_final_list(paths: List[List[str]]) -> List[List[str]]:
-    """This is the only reasonalbe way that enforce lists inside of a list not
+def create_placeholder_list(paths: List[List[str]]) -> List[List[str]]:
+    """This is the only reasonalbe way to enforce lists inside of a list not
     to be assigned to the same object"""
     return [[chr(0)] for _ in range(len(paths))]
 
 
-def process_paths(paths: List[List[str]], final_list) -> List:
+def process_paths(paths: List[List[str]]) -> List[str]:
+    final_list = create_placeholder_list(paths)
     for slice_list in zip_longest(*paths, fillvalue=""):
         if all(map(lambda x: x < 10, map(len, slice_list))):
             for pathi, p in enumerate(slice_list):
@@ -44,7 +45,7 @@ def process_paths(paths: List[List[str]], final_list) -> List:
         mask_shifted = mask_shifted[SURROUND_SIZE:]
         final_mask = [a or b for a, b in zip(mask, mask_shifted)]
 
-        buffer_list = create_final_list(slice_list)
+        buffer_list = create_placeholder_list(slice_list)
         for vals in zip(*slice_list, final_mask):
             chars, match = vals[:-1], vals[-1]
             if len(set(chars)) == 1 and not match:
@@ -68,22 +69,23 @@ def process_paths(paths: List[List[str]], final_list) -> List:
 
 
 if __name__ == "__main__":
-    a = "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/" \
+    a = (
+        "ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/"
         "somewhere/far/far/away/foo.bar"
-    b = "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/" \
+    )
+    b = (
+        "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/"
         "somewhere/far/far/away/notfoo.bar"
+    )
     c = "ns-task-script-hello-world/Lab1"
 
-    path_list = [a, b]
+    path_list = [a, b, c]
     print(f"This:\n{path_list}")
     paths, filenames = split_paths(path_list)
 
-    # TODO
-    d = deque()
-
-    final_list = create_final_list(paths)
-
-    processed_paths = process_paths(paths, final_list)
+    print("paths", paths)
+    processed_paths = process_paths(paths)
+    print(processed_paths)
 
     for i, pp in enumerate(filenames):
         processed_paths[i] = path.join(processed_paths[i], pp)

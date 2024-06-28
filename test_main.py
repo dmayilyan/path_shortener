@@ -48,8 +48,15 @@ def test_split_paths(path_list, path_only_list):
     assert split_paths(path_list) == expected
 
 
-def test_create_final_paths(path_list, expected):
-    assert create_final_list(path_list) == expected
+def test_create_placeholder_list(path_only_list):
+    expected = [[chr(0)], [chr(0)], [chr(0)]]
+    assert create_placeholder_list(path_only_list) == expected
 
 
-def test_create_paths_slice(path_list): ...
+def test_process_paths(path_only_list):
+    expected = [
+        "...s-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away",
+        "...s-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away",
+        "...s-task-script-hello-world/",
+    ]
+    assert process_paths(path_only_list) == expected
