@@ -141,6 +141,9 @@ def test_split_slice():
         "ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics",
     ]
 
-    expected = [('ns-client-bavo-protocol-manua', 'l-lhc-mellinbright-catmetrics\x00'),
-                ('ns-client-bavo-task-script-lh', 'c-plate-reader-echo-catmetrics')]
+    expected = [
+        ("ns-client-bavo-protocol-manua", "ns-client-bavo-task-script-lh"),
+        ("l-lhc-mellinbright-catmetrics\x00", "c-plate-reader-echo-catmetrics"),
+    ]
+
     assert split_slice(input_paths) == expected

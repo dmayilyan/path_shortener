@@ -36,10 +36,11 @@ def create_mask(slice_list: List[str]) -> List[bool]:
     return [a or b for a, b in zip(mask, mask_shifted)]
 
 
-def split_slice(path_slice: List[str]):
+def split_slice(path_slice: List[str]) -> List[Tuple[str]]:
     # We use len freely as we know that path slices are
     # already of an equal size
-    return [(i[: len(i) // 2], i[len(i) // 2:]) for i in path_slice]
+    splits = [(i[: len(i) // 2], i[len(i) // 2:]) for i in path_slice]
+    return [i for i in zip(*splits)]
 
 
 def process_paths(paths: List[List[str]]) -> List[str]:
@@ -55,7 +56,7 @@ def process_paths(paths: List[List[str]]) -> List[str]:
         slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
 
         # TODO
-        #  first_half, second_half = split_slice(slice_list)
+        first_half, second_half = split_slice(slice_list)
         mask = create_mask(slice_list)
 
         buffer_list = create_placeholder_list(slice_list)
