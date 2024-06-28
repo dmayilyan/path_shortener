@@ -54,6 +54,8 @@ def process_paths(paths: List[List[str]]) -> List[str]:
         max_in_slice = max(map(len, slice_list))
         slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
 
+        # TODO
+        #  first_half, second_half = split_slice(slice_list)
         mask = create_mask(slice_list)
 
         buffer_list = create_placeholder_list(slice_list)
