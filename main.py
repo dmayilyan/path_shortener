@@ -43,6 +43,21 @@ def split_slice(path_slice: List[str]) -> List[Tuple[str]]:
     return [i for i in zip(*splits)]
 
 
+def replace_with_mask(slice_list, mask: List[bool]):
+    buffer_list = create_placeholder_list(slice_list)
+    for vals in zip(*slice_list, mask):
+        chars, match = vals[:-1], vals[-1]
+        if len(set(chars)) == 1 and not match:
+            for vali in range(len(chars)):
+                if buffer_list[vali][-1] != "...":
+                    buffer_list[vali].append("...")
+        else:
+            for valj in range(len(chars)):
+                buffer_list[valj].append(vals[valj].strip(chr(0)))
+
+    return buffer_list
+
+
 def process_paths(paths: List[List[str]]) -> List[str]:
     MIN_FOLDER_LENGTH = 10
     final_list = create_placeholder_list(paths)
@@ -52,25 +67,26 @@ def process_paths(paths: List[List[str]]) -> List[str]:
                 final_list[pathi].append(p)
             continue
 
-        max_in_slice = max(map(len, slice_list))
-        slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
+        #  max_in_slice = max(map(len, slice_list))
+        #  slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
 
         # TODO
         first_half, second_half = split_slice(slice_list)
-        mask = create_mask(slice_list)
 
-        buffer_list = create_placeholder_list(slice_list)
-        for vals in zip(*slice_list, mask):
-            chars, match = vals[:-1], vals[-1]
-            if len(set(chars)) == 1 and not match:
-                for vali in range(len(chars)):
-                    if buffer_list[vali][-1] != "...":
-                        buffer_list[vali].append("...")
-            else:
-                for valj in range(len(chars)):
-                    buffer_list[valj].append(vals[valj].strip(chr(0)))
+        first_mask = create_mask(first_half)
+        first_buffer = replace_with_mask(first_half, first_mask)
+        first_buffer = ["".join(bitem) for bitem in first_buffer]
 
-        buffer_list = ["".join(bitem) for bitem in buffer_list]
+        second_half = [i[::-1] for i in second_half]
+
+        second_mask = create_mask(second_half)
+        second_buffer = replace_with_mask(second_half, second_mask)
+        second_buffer = ["".join(bitem[::-1]) for bitem in second_buffer]
+
+        buffer_list = []
+        for fb, sb in zip(first_buffer, second_buffer):
+            buffer_list.append(fb+sb)
+
         buffer_list = [bitem.strip(chr(0)) for bitem in buffer_list]
 
         for bi, fi in zip(buffer_list, final_list):
