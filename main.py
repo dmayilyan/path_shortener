@@ -8,7 +8,7 @@ def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
 
     paths, files = zip(*((p, f) for p, f in split_blocks))
     # This is not OS agnostic approach
-    paths = [i.split("/") for i in paths]
+    paths = [i.split(path.sep) for i in paths]
 
     return paths, files
 
