@@ -13,9 +13,12 @@ def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
     return paths, files
 
 
-def create_placeholder_list(paths: List[List[str]]) -> List[List[str]]:
+def create_placeholder_list(paths: Iterable[Iterable[str]]) -> List[List[str]]:
     """This is the only reasonalbe way to enforce lists inside of a list not
     to be assigned to the same object"""
+    #  print(paths)
+    #  print("cpl", [[chr(0)] for _ in range(len(paths))])
+    #  print("cpl", [[chr(0)] for _ in range(len(paths))])
     return [[chr(0)] for _ in range(len(paths))]
 
 
@@ -86,7 +89,7 @@ def process_paths(paths: List[List[str]]) -> List[str]:
 
         buffer_list = []
         for fb, sb in zip(first_buffer, second_buffer):
-            buffer_list.append(fb+sb)
+            buffer_list.append(fb + sb)
 
         buffer_list = [bitem.strip(chr(0)) for bitem in buffer_list]
 

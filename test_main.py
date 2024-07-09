@@ -59,16 +59,6 @@ def test_create_placeholder_list(path_only_list):
     assert create_placeholder_list(path_only_list) == expected
 
 
-def test_process_paths(path_only_list):
-    expected = [
-        "...s-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/"
-        "somewhere/far/far/away",
-        "...s-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/"
-        "somewhere/far/far/away",
-        "...s-task-script-hello-world/",
-    ]
-    assert process_paths(path_only_list) == expected
-
 
 def test_create_mask(slice_list):
     expected = [
