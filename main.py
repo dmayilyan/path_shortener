@@ -27,7 +27,7 @@ def create_mask(slice_list: List[str]) -> List[bool]:
         else:
             mask.append(False)
 
-    SURROUND_SIZE = 2
+    SURROUND_SIZE = 1
 
     mask_shifted = mask.copy()
     mask_shifted += [False] * SURROUND_SIZE
@@ -41,6 +41,18 @@ def split_slice(path_slice: List[str]) -> List[Tuple[str]]:
     # already of an equal size
     splits = [(i[: len(i) // 2], i[len(i) // 2:]) for i in path_slice]
     return [i for i in zip(*splits)]
+
+
+def process_half(half, reverse=False):
+    if reverse:
+        half = [i[::-1] for i in half]
+
+    mask = create_mask(half)
+    buffer = replace_with_mask(half, mask)
+    if reverse:
+        return ["".join(bitem[::-1]) for bitem in buffer]
+
+    return ["".join(bitem) for bitem in buffer]
 
 
 def replace_with_mask(slice_list, mask: List[bool]):
@@ -67,21 +79,10 @@ def process_paths(paths: List[List[str]]) -> List[str]:
                 final_list[pathi].append(p)
             continue
 
-        #  max_in_slice = max(map(len, slice_list))
-        #  slice_list = [i.ljust(max_in_slice, chr(0)) for i in slice_list]
-
-        # TODO
         first_half, second_half = split_slice(slice_list)
 
-        first_mask = create_mask(first_half)
-        first_buffer = replace_with_mask(first_half, first_mask)
-        first_buffer = ["".join(bitem) for bitem in first_buffer]
-
-        second_half = [i[::-1] for i in second_half]
-
-        second_mask = create_mask(second_half)
-        second_buffer = replace_with_mask(second_half, second_mask)
-        second_buffer = ["".join(bitem[::-1]) for bitem in second_buffer]
+        first_buffer = process_half(first_half)
+        second_buffer = process_half(second_half, reverse=True)
 
         buffer_list = []
         for fb, sb in zip(first_buffer, second_buffer):
