@@ -59,7 +59,6 @@ def test_create_placeholder_list(path_only_list):
     assert create_placeholder_list(path_only_list) == expected
 
 
-
 def test_create_mask(slice_list):
     expected = [
         False,
@@ -137,3 +136,15 @@ def test_split_slice():
     ]
 
     assert split_slice(input_paths) == expected
+
+
+def test_identical_path_block():
+    input_paths = [
+        "same_path_to_a_file/foo.bar",
+        "same_path_to_a_file/notfoo.bar",
+    ]
+
+    expected = ['.../foo.bar', '.../notfoo.bar']
+    result = process_all(input_paths)
+
+    assert result == expected

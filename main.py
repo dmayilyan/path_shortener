@@ -16,9 +16,6 @@ def split_paths(paths: Iterable[str]) -> Tuple[List[str], Tuple[str]]:
 def create_placeholder_list(paths: Iterable[Iterable[str]]) -> List[List[str]]:
     """This is the only reasonalbe way to enforce lists inside of a list not
     to be assigned to the same object"""
-    #  print(paths)
-    #  print("cpl", [[chr(0)] for _ in range(len(paths))])
-    #  print("cpl", [[chr(0)] for _ in range(len(paths))])
     return [[chr(0)] for _ in range(len(paths))]
 
 
@@ -89,7 +86,10 @@ def process_paths(paths: List[List[str]]) -> List[str]:
 
         buffer_list = []
         for fb, sb in zip(first_buffer, second_buffer):
-            buffer_list.append(fb + sb)
+            if fb.endswith("...") and sb.startswith("..."):
+                buffer_list.append(fb + sb[3:])
+            else:
+                buffer_list.append(fb + sb)
 
         buffer_list = [bitem.strip(chr(0)) for bitem in buffer_list]
 
@@ -101,6 +101,20 @@ def process_paths(paths: List[List[str]]) -> List[str]:
     final_list = [path.join(*fi) for fi in final_list]
 
     return final_list
+
+
+def process_all(path_list: Iterable) -> List[str]:
+    print(f"This:\n{path_list}")
+    paths, filenames = split_paths(path_list)
+
+    processed_paths = process_paths(paths)
+
+    for i, pp in enumerate(filenames):
+        processed_paths[i] = path.join(processed_paths[i], pp)
+
+    print(f"Becomes this:\n{processed_paths}")
+
+    return processed_paths
 
 
 if __name__ == "__main__":
@@ -115,12 +129,9 @@ if __name__ == "__main__":
     c = "ns-task-script-hello-world/Lab1"
 
     path_list = [a, b]
-    print(f"This:\n{path_list}")
-    paths, filenames = split_paths(path_list)
 
-    processed_paths = process_paths(paths)
-
-    for i, pp in enumerate(filenames):
-        processed_paths[i] = path.join(processed_paths[i], pp)
-
-    print(f"Becomes this:\n{processed_paths}")
+    input_paths = [
+        "same_path_to_a_file/foo.bar",
+        "same_path_to_a_file/notfoo.bar",
+    ]
+    process_all(input_paths)
