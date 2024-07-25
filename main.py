@@ -130,8 +130,4 @@ if __name__ == "__main__":
 
     path_list = [a, b]
 
-    input_paths = [
-        "same_path_to_a_file/foo.bar",
-        "same_path_to_a_file/notfoo.bar",
-    ]
-    process_all(input_paths)
+    process_all(path_list)
