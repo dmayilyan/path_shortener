@@ -10,7 +10,9 @@ For example for a list of 2 paths with same begining and end we will get:
 
 ```
 This:
-['ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away/foo.bar', 'ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away/notfoo.bar']
+['ns-client-bavo-protocol-manual-lhc-mellinbright-catmetrics/to/somewhere/far/far/away/foo.bar',
+ 'ns-client-bavo-task-script-lhc-plate-reader-echo-catmetrics/to/somewhere/far/far/away/notfoo.bar']
 Becomes this:
-['...-protocol-manual-lhc-mellinbright-.../to/somewhere/far/far/away/foo.bar', '...-task-script-lh-plate-reader-echo-.../to/somewhere/far/far/away/notfoo.bar']
+['...-protocol-manual-lhc-mellinbright-.../to/somewhere/far/far/away/foo.bar',
+ '...-task-script-lh-plate-reader-echo-.../to/somewhere/far/far/away/notfoo.bar']
 ```
