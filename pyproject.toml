@@ -1,0 +1,27 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "path shortener"
+version = "0.1"
+description = "A packege to shorten common parts of a list of paths."
+authors = [
+    { name="Davit Mayilyan", email = "davit.mayilyan@protonmail.ch"}
+]
+license = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+],
+requires-python = ">=3.6"
+
+[project.urls]
+"Homepage" = "https://github.com/dmayilyan/path_shortener"
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "*.ipynb"
+]
